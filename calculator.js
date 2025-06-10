@@ -110,7 +110,15 @@ function multiply(a, b) {
   return a * b;
 }
 function divide(a, b) {
-  if (b === 0) return 'ERROR cannot divide by zero';
+  if (b === 0) {
+    display.textContent = '';
+    expressionDisplay.textContent = `${a} / ${b}`;
+    firstOperand = '';
+    secondOperand = '';
+    currentOperator = "Nice try. 🤨 You can't divide by zero.";
+    justEvaluated = true;
+    return '';
+  }
   return a / b;
 }
 
