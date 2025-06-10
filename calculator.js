@@ -1,5 +1,6 @@
 // Display and State Variables
 const display = document.getElementById('display');
+const expressionDisplay = document.getElementById('expression');
 const digitButtons = document.querySelectorAll('[data-digit]');
 const operatorButtons = document.querySelectorAll('[data-operator]');
 const equalsButton = document.getElementById('equals');
@@ -11,6 +12,7 @@ let firstOperand = '';
 let secondOperand = '';
 let currentOperator = null;
 let shouldResetScreen = false;
+let justEvaluated = false;
 
 // Digit Button clicks handler
 digitButtons.forEach((button) =>
@@ -22,6 +24,7 @@ function appendDigit(digit) {
     resetScreen();
   }
   display.textContent += digit;
+  justEvaluated = false;
 }
 function resetScreen() {
   display.textContent = '';
@@ -34,10 +37,12 @@ operatorButtons.forEach((button) =>
 );
 
 function setOperator(operator) {
-  if (currentOperator !== null) evaluate();
+  if (currentOperator !== null && !justEvaluated) evaluate(); // Chain calculations;
   firstOperand = display.textContent;
   currentOperator = operator;
   shouldResetScreen = true;
+  updateExpressionDisplay();
+  justEvaluated = false;
 }
 
 // Equals Button handler
@@ -48,9 +53,15 @@ function evaluate() {
   secondOperand = display.textContent;
   const result = operate(currentOperator, firstOperand, secondOperand);
   display.textContent = roundResult(result);
+  expressionDisplay.textContent = `${firstOperand} ${currentOperator} ${secondOperand} =`;
+
+  firstOperand = result.toString();
+  secondOperand = '';
   currentOperator = null;
+  justEvaluated = true;
 }
 
+// Round result to avoid long decimals
 function roundResult(num) {
   return Math.round(num * 1000) / 1000;
 }
@@ -60,26 +71,35 @@ clearButton.addEventListener('click', clear);
 backspaceButton.addEventListener('click', backspace);
 
 function clear() {
-  display.textContent = '';
+  display.textContent = '0';
+  expressionDisplay.textContent = '';
   firstOperand = '';
   secondOperand = '';
   currentOperator = null;
   shouldResetScreen = false;
+  justEvaluated = false;
 }
 
 function backspace() {
-  display.textContent = display.textContent.slice(0, -1);
+  if (shouldResetScreen || justEvaluated) return;
+  display.textContent = display.textContent.slice(0, -1) || '0';
 }
 
 // Decimal input logic, preventing multiple decimals
 decimalButton.addEventListener('click', appendDecimal);
 
 function appendDecimal() {
-  if (shouldResetScreen) resetScreen();
+  if (shouldResetScreen || justEvaluated) resetScreen();
   if (!display.textContent.includes('.')) {
-    display.textContent += '.';
+    display.textContent += display.textContent ? '.' : '0';
   }
+  justEvaluated = false;
 }
+
+function updateExpressionDisplay() {
+  expressionDisplay.textContent = `${firstOperand} ${currentOperator}`;
+}
+
 function add(a, b) {
   return a + b;
 }
