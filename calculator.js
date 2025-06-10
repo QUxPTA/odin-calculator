@@ -12,7 +12,7 @@ function divide(a, b) {
   return a / b;
 }
 
-function calculate(operator, a, b) {
+function operate(operator, a, b) {
   a = Number(a);
   b = Number(b);
   switch (operator) {
