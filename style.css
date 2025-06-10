@@ -84,7 +84,7 @@ body {
 }
 
 .operator:hover {
-  background-color: #fb8c00;
+  background-color: #d99041;
 }
 
 .equals {
@@ -92,7 +92,7 @@ body {
 }
 
 .equals:hover {
-  background-color: #2196f3;
+  background-color: #23c1f5;
 }
 
 .clear {
@@ -101,14 +101,14 @@ body {
 }
 
 .clear:hover {
-  background-color: #e53935;
+  background-color: #e55e35;
 }
 
-.backspace {
+#backspace {
   background-color: #616161;
 }
 
-.backspace:hover {
+#backspace:hover {
   background-color: #757575;
 }
 
